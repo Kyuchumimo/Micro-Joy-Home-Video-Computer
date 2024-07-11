@@ -1,5 +1,5 @@
 # Micro-Joy-Home-Video-Computer
-Real old school hardware based fantasy computer  
+Real old school hardware based fantasy computer. for all the details, please visit the [wiki](https://github.com/Kyuchumimo/Micro-Joy-Home-Video-Computer/wiki)  
 ![Micro Joy Home Video Computer](https://github.com/Kyuchumimo/Micro-Joy-Home-Video-Computer/assets/74131798/26b74839-57f7-4812-b579-5e045b2516cb)
 
 ## Specifications
