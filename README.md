@@ -2,7 +2,7 @@
 Real old school hardware based fantasy computer.  
 For all the details, please visit the [wiki](https://github.com/Kyuchumimo/Micro-Joy-Home-Video-Computer/wiki)  
 
-This repository is under constant construction. Once finished building the libraries and the wiki, the corresponding files will be uploaded. Please be patient.
+This repository is under constant construction. Once finished building the libraries, tools and the wiki, the corresponding files will be uploaded. Please be patient.
 
 ![Micro Joy Home Video Computer](https://github.com/Kyuchumimo/Micro-Joy-Home-Video-Computer/assets/74131798/26b74839-57f7-4812-b579-5e045b2516cb)
 
