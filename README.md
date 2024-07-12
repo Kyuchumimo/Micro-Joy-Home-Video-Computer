@@ -18,3 +18,19 @@ This repository is under constant construction. Once finished building the libra
 
 ## Schematics
 TODO
+
+## Special thanks to
+This project would not have been possible without the existence of these other awesome projects and communities:  
+* [nesbox/TIC-80](https://github.com/nesbox/TIC-80)
+* [AVR-AY](https://www.avray.ru)
+* [toyoshim/SoundCortex](https://github.com/toyoshim/SoundCortex)
+* [tildearrow/furnace](https://github.com/tildearrow/furnace)
+* [Rasmus-M/magellan](https://github.com/Rasmus-M/magellan)
+* [peterhinch/micropython_eeprom](https://github.com/peterhinch/micropython_eeprom)
+* [mcauser/micropython-74hc595](https://github.com/mcauser/micropython-74hc595)
+* [mcauser/micropython-pcd8544](https://github.com/mcauser/micropython-pcd8544)
+* [michalin/TMSS9918_Arduino](https://github.com/michalin/TMS9918_Arduino)
+* [ricardoquesada/quico](https://gitlab.com/ricardoquesada/quico)
+* The Chiptune Café
+* Pygame Community
+* Python Discord
