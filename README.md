@@ -1,5 +1,7 @@
 # Micro-Joy-Home-Video-Computer
-Real old school hardware based fantasy computer.  
+Real old school hardware based fantasy computer/console.  
+
+To see a demonstration, please visit the [Micro Joy Home Video Computer - DEMO](https://youtu.be/gQPsIUr0FW8) video  
 For all the details, please visit the [wiki](https://github.com/Kyuchumimo/Micro-Joy-Home-Video-Computer/wiki)  
 
 This repository is under constant construction. Once finished building the libraries, tools and the wiki, the corresponding files will be uploaded. Please be patient.
