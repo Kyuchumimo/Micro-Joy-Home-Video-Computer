@@ -34,6 +34,7 @@ This project would not have been possible without the existence of these other a
 * [mcauser/micropython-pcf8574](https://github.com/mcauser/micropython-pcf8574)
 * [michalin/TMSS9918_Arduino](https://github.com/michalin/TMS9918_Arduino)
 * [ricardoquesada/quico](https://gitlab.com/ricardoquesada/quico)
+* [micropython/micropython](https://github.com/micropython/micropython)
 * The Chiptune Café
 * Pygame Community
 * Python Discord
