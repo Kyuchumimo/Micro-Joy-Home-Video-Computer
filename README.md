@@ -39,6 +39,7 @@ This project would not have been possible without the existence of these other a
 * Python Discord
 * Fantasy Consoles 2.0
 * Unexpected Maker
+* MicroPython
 * [@EricDMG01](https://twitter.com/EricDMG01)
 * [@pixelbath](https://twitter.com/pixelbath)
 * [@AxlProtogen](https://twitter.com/AxlProtogen)
@@ -46,3 +47,4 @@ This project would not have been possible without the existence of these other a
 * [@AudioTryhard](https://twitter.com/AudioTryhard)
 * [@alexxdip11](https://twitter.com/alexxdip11)
 * [Daverd](https://soundcloud.com/daverd-chiptune)
+* [ProHiScore](https://twitter.com/TeamProHiScore)
