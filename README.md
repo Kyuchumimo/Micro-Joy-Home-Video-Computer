@@ -49,3 +49,4 @@ This project would not have been possible without the existence of these other a
 * [@alexxdip11](https://twitter.com/alexxdip11)
 * [Daverd](https://soundcloud.com/daverd-chiptune)
 * [ProHiScore](https://twitter.com/TeamProHiScore)
+* Mega Sparkmaster
