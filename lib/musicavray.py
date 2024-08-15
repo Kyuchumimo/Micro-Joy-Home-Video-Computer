@@ -7,7 +7,7 @@ __docformat__ = "restructuredtext"
 
 class Musicavray:
     """
-    Class to play music on an YMZ284 chip
+    Class to play music on an ATmega8/48/88/168/328 chip
     """
     def __init__(self):
         self._offset = 0
