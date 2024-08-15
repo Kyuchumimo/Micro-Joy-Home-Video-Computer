@@ -23,7 +23,7 @@ This repository is under constant construction. Once finished building the libra
 * VGM file optimizer
 * PIO 8-bit parallel read
 * How to load WT588D binary (wiki)
-* Constants
+* Constants (wiki)
 
 ## Special thanks to
 This project would not have been possible without the existence of these other awesome projects, communities and people:  
