@@ -18,8 +18,12 @@ This repository is under constant construction. Once finished building the libra
 | Programming language  | MicroPython v1.17 or higher |
 | Software media  | 25xx02/04/08/16/32 Mbit external SPI Flash or Internal Flash  |
 
-## Schematics
-TODO
+## To do list
+* Schematics
+* VGM file optimizer
+* PIO 8-bit parallel read
+* How to load WT588D binary (wiki)
+* Constants
 
 ## Special thanks to
 This project would not have been possible without the existence of these other awesome projects, communities and people:  
