@@ -68,7 +68,7 @@ class Musicavray:
             #  Input clock rate in Hz for the AY-3-8910 PSG chip. A typical value is
             #  1789772. It should be 0 if there is no PSG chip used.
             ay8910_clock = struct.unpack_from("<I", header, 0x74)[0]
-            if sn76489_clock != 1789772:
+            if ay8910_clock != 1789772:
                 raise Exception(
                     f"Invalid VGM clock freq; got {ay8910_clock}, want 1789772"
                 )
