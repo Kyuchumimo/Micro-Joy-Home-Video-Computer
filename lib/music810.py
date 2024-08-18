@@ -77,7 +77,7 @@ class Music810:
             #  Input clock rate in Hz for the Konami SCC PSG chip. A typical value is
             #  1789772. It should be 0 if there is no PSG chip used.
             k051649_clock = struct.unpack_from("<I", header, 0x9C)[0]
-            if (k051649_clock != 1789772) or (k051649_clock != 0):
+            if not ((k051649_clock == 1789772) or (k051649_clock == 0)):
                 raise Exception(
                     f"Invalid VGM clock freq; got {k051649_clock}, want 1789772 or 0"
                 )
