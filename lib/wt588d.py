@@ -15,7 +15,7 @@ class WT588D:
         if self.cs:
             self.cs.init(self.rst.OUT, value=1)
 
-    def Send_threelines(self, addr):
+    def send_threelines(self, addr):
         self.rst.value(0)           # reset the IC
         time.sleep_ms(5)            # reset signal retain low level 5ms
         self.rst.value(1)
@@ -37,7 +37,7 @@ class WT588D:
 
         self.cs.value(1)
 
-    def Send_oneline(self, addr):
+    def send_oneline(self, addr):
         self.rst.value(0)           # reset the IC
         time.sleep_ms(5)            # reset signal retain low level 5ms
         self.rst.value(1)
