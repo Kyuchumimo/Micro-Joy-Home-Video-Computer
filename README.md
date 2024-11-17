@@ -54,3 +54,4 @@ This project would not have been possible without the existence of these other a
 * [Daverd](https://soundcloud.com/daverd-chiptune)
 * [ProHiScore](https://twitter.com/TeamProHiScore)
 * Mega Sparkmaster
+* Daniel Quadros
