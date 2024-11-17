@@ -2,9 +2,6 @@ from machine import Pin
 from rp2 import PIO, StateMachine, asm_pio
 import time
 
-for i in range(8):
-    Pin(i, Pin.IN)
-
 # VIDEO
 CSW = Pin(13, Pin.OUT)
 CSR = Pin(14, Pin.OUT)
