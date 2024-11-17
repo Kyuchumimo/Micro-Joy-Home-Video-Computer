@@ -2,28 +2,32 @@ from machine import Pin
 from rp2 import PIO, StateMachine, asm_pio
 import time
 
+for i in range(8):
+    Pin(i, Pin.IN)
+
 # VIDEO
 CSW = Pin(13, Pin.OUT)
 CSR = Pin(14, Pin.OUT)
 MODE = Pin(15, Pin.OUT)
 
-@asm_pio(sideset_init=PIO.OUT_HIGH, out_init=(rp2.PIO.OUT_HIGH,) * 8, out_shiftdir=PIO.SHIFT_RIGHT,
+@asm_pio(sideset_init=PIO.OUT_HIGH, out_init=(rp2.PIO.OUT_LOW,) * 8, out_shiftdir=PIO.SHIFT_RIGHT,
  autopull=True, pull_thresh=16)
 def paral_write():
     pull()        
     out(pins, 8)  .side(0)
     nop()         .side(1)
 
-@asm_pio(sideset_init=PIO.OUT_HIGH, set_init=(rp2.PIO.IN_LOW,) * 8)
+@asm_pio(sideset_init=PIO.OUT_HIGH, in_shiftdir=rp2.PIO.SHIFT_LEFT,
+ autopush=True, push_thresh=16)
 def paral_read():
     nop()         .side(0)
     in_(pins, 8)
     push()        .side(1)
 
-write_sm = StateMachine(0, paral_write, freq=1000000, sideset_base=CSW, out_base=Pin(0))
+write_sm = StateMachine(0, paral_write, freq=1000000, sideset_base=CSW, out_base=Pin(5))
 write_sm.active(1)
 
-read_sm = StateMachine(1, paral_read, freq=90000, sideset_base=CSR, in_base=Pin(0))
+read_sm = StateMachine(1, paral_read, freq=90000, sideset_base=CSR, in_base=Pin(5))
 read_sm.active(1)
 
 VDP_TRANSPARENT = 0
@@ -64,6 +68,7 @@ def write_byte_to_VRAM(value):
 
 def read_byte_from_VRAM():
     MODE.value(0)
+    write_sm.put(0)
     memByte = read_sm.get()
     return memByte
 
@@ -328,10 +333,10 @@ music = music810.Music810()
 music.play_notes("SO4GGO5CEQG")
 
 # INPUT
-dataPin0 = Pin(18, Pin.IN)
-dataPin1 = Pin(19, Pin.IN)
-clockPin = Pin(16, Pin.OUT)
-latchPin = Pin(17, Pin.OUT)
+dataPin0 = Pin(22, Pin.IN, Pin.PULL_UP)
+dataPin1 = Pin(26, Pin.IN, Pin.PULL_UP)
+clockPin = Pin(20, Pin.OUT)
+latchPin = Pin(21, Pin.OUT)
 
 btn0 = [False] * 8
 btn1 = [False] * 8
@@ -362,8 +367,29 @@ def read_input():
         clockPin.low()
     return None, None
 
-# PERSISTENT MEMORY
+# in_shiftdir=rp2.PIO.SHIFT_RIGHT -> shift received bits to right
+# autopush=True, push_thresh=11   -> push to receive queue when 11 bits are shifted
+# fifo_join=rp2.PIO.JOIN_RX       -> join tx queue into rx queue
+@rp2.asm_pio(in_shiftdir=rp2.PIO.SHIFT_RIGHT, autopush=True, push_thresh=11, fifo_join=rp2.PIO.JOIN_RX)
+def rdKbd():
+    wrap_target()
+    wait (1, pin, 1)
+    wait (0, pin, 1)
+    in_ (pins, 1)
+    wrap()
 
+# Configure input pins
+pin27 = Pin(27, Pin.IN, Pin.PULL_UP)
+pin28 = Pin(28, Pin.IN, Pin.PULL_UP)
+
+# A 100kHz clock for the State Machine is enough for the (around) 12kHz clock of the keyboard
+# Input pin numbers for the State Machine start at pin 14
+kb_sm = rp2.StateMachine(2, rdKbd, freq=120000, in_base=pin27)
+
+# Activate the State Machine
+kb_sm.active(1)
+
+# PERSISTENT MEMORY
 SAVEID = ""
 
 # TIC-80'S PMEM() FUNCTION, https://github.com/nesbox/TIC-80/wiki/pmem
