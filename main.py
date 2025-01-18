@@ -8,12 +8,34 @@ listdir = [i for i in os.ilistdir()]
 
 vdp_init(VDP_MODE_TEXT, VDP_BLACK, True, False)
 
-vdp_print(os.getcwd(), 0, 0)
+def _DRAW_DIR():
+    if len(os.getcwd()) > 32:
+        if len(os.getcwd().split('/')[-1]) > 28:
+            vdp_print(f".../{os.getcwd().split('/')[-1][:25]}...", 0, 0) 
+        else:
+            vdp_print(f"{os.getcwd()[:28-len(os.getcwd().split('/')[-1])]}.../{os.getcwd().split('/')[-1]}", 0, 0) 
+    else:
+        vdp_print(os.getcwd(), 0, 0)
+
+def _DRAW_FS():
+    for i in range(min(len(listdir), 23)):
+        if listdir[offset+i][1] == 0x8000:  # FILE
+            if len(listdir[offset+i][0]) > 28:
+                vdp_print(f"{listdir[offset+i][0][:25]}...", 2, i+1)
+            else:
+                vdp_print(f"{listdir[offset+i][0]:28s}", 2, i+1)
+            vdp_print(f"{listdir[offset+i][3]:<8d}B".replace(' ', '.'), 31, i+1)  # FILE SIZE
+        elif listdir[offset+i][1] == 0x4000:  # FOLDER
+            if len(listdir[offset+i][0]) > 27:
+                vdp_print(f"/{listdir[offset+i][0][:24]}...          ", 2, i+1)
+            else:
+                vdp_print(f"/{listdir[offset+i][0]:37s}", 2, i+1)
+
+_DRAW_DIR()
+_DRAW_FS()
+
 vdp_print(f"{opt+offset+1:03d}/{len(listdir):03d}", 33, 0)
 vdp_print(">", 0, 1+opt)
-
-for i in range(min(len(listdir), 23)):
-    vdp_print(f"{listdir[offset+i][1] == 0x4000 and '/' or ''}{listdir[offset+i][0]:38s}", 2, i+1)
 
 try:
     while True:
@@ -34,8 +56,7 @@ try:
                     if offset==0: opt = (opt-1)%min(len(listdir), 23)
                     offset = (offset-1)%max(len(listdir)-22, 1)
                     
-                    for i in range(min(len(listdir), 23)):
-                        vdp_print(f"{listdir[offset+i][1] == 0x4000 and '/' or ''}{listdir[offset+i][0]:38s}", 2, i+1)
+                    _DRAW_FS()
                 else:
                     opt = (opt-1)%min(len(listdir), 23)
             elif btnp0 == 5: # DOWN
@@ -45,8 +66,7 @@ try:
                     if offset==len(listdir)-23: opt = (opt+1)%23
                     offset = (offset+1)%(len(listdir)-22)
                     
-                    for i in range(min(len(listdir), 23)):
-                        vdp_print(f"{listdir[offset+i][1] == 0x4000 and '/' or ''}{listdir[offset+i][0]:38s}", 2, i+1)
+                    _DRAW_FS()
                 else:
                     opt = (opt+1)%min(len(listdir), 23)
             elif btnp0 == 0: # 1
@@ -66,9 +86,8 @@ try:
                         opt = 0
                         offset = 0
                     
-                    vdp_print(os.getcwd(), 0, 0)
-                    for i in range(min(len(listdir), 23)):
-                        vdp_print(f"{listdir[offset+i][1] == 0x4000 and '/' or ''}{listdir[offset+i][0]:38s}", 2, i+1)
+                    _DRAW_DIR()
+                    _DRAW_FS()
                 except BaseException as err:
                     from sys import print_exception
                     print_exception(err)
@@ -86,9 +105,9 @@ try:
 
                     vdp_textcolor(VDP_WHITE, VDP_BLACK)
                     vdp_cls()
-                    vdp_print(os.getcwd(), 0, 0)
-                    for i in range(min(len(listdir), 23)):
-                        vdp_print(f"{listdir[offset+i][1] == 0x4000 and '/' or ''}{listdir[offset+i][0]:38s}", 2, i+1)
+                    
+                    _DRAW_DIR()     
+                    _DRAW_FS()
             elif btnp0 == 1: # 0
                 os.chdir('..')
                 listdir = [i for i in os.ilistdir(os.getcwd())]
@@ -97,9 +116,9 @@ try:
                 offset = 0
                 
                 vdp_cls()
-                vdp_print(os.getcwd(), 0, 0)
-                for i in range(min(len(listdir), 23)):
-                    vdp_print(f"{listdir[offset+i][1] == 0x4000 and '/' or ''}{listdir[offset+i][0]:38s}", 2, i+1)
+                
+                _DRAW_DIR()    
+                _DRAW_FS()
             
             vdp_print(f"{opt+offset+1:03d}/{len(listdir):03d}", 33, 0)
             vdp_print(">", 0, 1+opt)
