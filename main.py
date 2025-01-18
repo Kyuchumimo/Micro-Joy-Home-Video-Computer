@@ -24,7 +24,7 @@ def _DRAW_FS():
                 vdp_print(f"{listdir[offset+i][0][:25]}...", 2, i+1)
             else:
                 vdp_print(f"{listdir[offset+i][0]:28s}", 2, i+1)
-            vdp_print(f"{listdir[offset+i][3]:<8d}B".replace(' ', '.'), 31, i+1)  # FILE SIZE
+            vdp_print(f"{listdir[offset+i][3]:>8d}B", 31, i+1)  # FILE SIZE
         elif listdir[offset+i][1] == 0x4000:  # FOLDER
             if len(listdir[offset+i][0]) > 27:
                 vdp_print(f"/{listdir[offset+i][0][:24]}...          ", 2, i+1)
