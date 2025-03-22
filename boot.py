@@ -15,7 +15,7 @@ def paral_write():
     nop()         .side(1)
 
 @asm_pio(sideset_init=PIO.OUT_HIGH, in_shiftdir=rp2.PIO.SHIFT_LEFT,
- autopush=True, push_thresh=16)
+ autopush=False, push_thresh=16)
 def paral_read():
     nop()         .side(0)
     in_(pins, 8)
@@ -24,7 +24,7 @@ def paral_read():
 write_sm = StateMachine(0, paral_write, freq=1000000, sideset_base=CSW, out_base=Pin(5))
 write_sm.active(1)
 
-read_sm = StateMachine(1, paral_read, freq=90000, sideset_base=CSR, in_base=Pin(5))
+read_sm = StateMachine(1, paral_read, freq=1000000, sideset_base=CSR, in_base=Pin(5))
 read_sm.active(1)
 
 VDP_TRANSPARENT = 0
@@ -65,9 +65,9 @@ def write_byte_to_VRAM(value):
 
 def read_byte_from_VRAM():
     MODE.value(0)
-    write_sm.put(0)
-    memByte = read_sm.get()
-    return memByte
+    if read_sm.rx_fifo():
+        return read_sm.get()  # Obtener un byte (8 bits) desde el FIFO
+    return None
 
 def set_register(register_index, value):
     write_byte(value)
@@ -320,7 +320,12 @@ def vdp_init(mode, color=VDP_BLACK, big_sprites=False, magnify=False):
 
 vdp_init(VDP_MODE_TEXT, VDP_BLACK, True, False)
 
-vdp_print("MICRO JOY HOME VIDEO COMPUTER\nVERSION 2024.11.16\nCOPYRIGHT (C) 2018-2024 KYUCHUMIMO\nALL RIGHTS RESERVED", 1, 1)
+vdp_print("""MICRO JOY HOME VIDEO COMPUTER\nVERSION 2025.03.21\nCOPYRIGHT (C) 2024-2025 KYUCHUMIMO
+
+THIS SOFTWARE COMES WITH ABSOLUTELY NO
+WARRANTY, TO THE EXTENT PERMITTED BY
+APPLICABLE LAW.
+""", 0, 0)
 
 # AUDIO
 import music810
