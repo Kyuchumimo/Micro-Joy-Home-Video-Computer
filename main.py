@@ -78,7 +78,7 @@ try:
                         with open(f"{os.getcwd()}/{listdir[opt+offset][0]}", "r") as f:
                             exec(f.read())
                         
-                        vdp_init(VDP_MODE_TEXT, VDP_BLACK, True, False)
+                        machine.reset()
                     elif listdir[opt+offset][1] == 0x4000:
                         os.chdir(listdir[opt+offset][0])
                         listdir = [i for i in os.ilistdir(os.getcwd())]
@@ -87,7 +87,7 @@ try:
                         offset = 0
                     
                     _DRAW_DIR()
-                    _DRAW_FS()
+                    _DRAW_FS()                
                 except BaseException as err:
                     from sys import print_exception
                     print_exception(err)
@@ -106,7 +106,7 @@ try:
                     vdp_textcolor(VDP_WHITE, VDP_BLACK)
                     vdp_cls()
                     
-                    _DRAW_DIR()     
+                    _DRAW_DIR()
                     _DRAW_FS()
             elif btnp0 == 1: # 0
                 os.chdir('..')
@@ -117,7 +117,7 @@ try:
                 
                 vdp_cls()
                 
-                _DRAW_DIR()    
+                _DRAW_DIR()
                 _DRAW_FS()
             
             vdp_print(f"{opt+offset+1:03d}/{len(listdir):03d}", 33, 0)
