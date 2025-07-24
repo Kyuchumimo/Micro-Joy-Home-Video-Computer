@@ -43,9 +43,9 @@ class Musicavray:
             #  This is used for backwards compatibility in players, and defines which
             #  header values are valid.
             vgm_version = struct.unpack_from("<I", header, 8)[0]
-            if vgm_version <= 0x161:
+            if vgm_version != 0x171:
                 raise Exception(
-                    f"Invalid VGM version format; got {vgm_version:x}, want <= 0x161"
+                    f"Invalid VGM version format; got {vgm_version:x}, want 0x171"
                 )
 
             # 0x04: Eof offset (32 bits)
