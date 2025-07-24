@@ -80,6 +80,8 @@ except IndexError as e:
 file.close()
 
 # NEW VGM
+# NO GD3 TAG
+new_data[0x14:0x18] = struct.pack('<I', 0)
 # NEW LOOP OFFSET
 new_data[0x1C:0x20] = struct.pack('<I', loop_offset - (vmg_data_offset + 0x34 - 0x100) - saved)
 
