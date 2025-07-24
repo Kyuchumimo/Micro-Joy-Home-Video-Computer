@@ -73,13 +73,14 @@ class Music810:
                     f"Invalid VGM clock freq; got {ay8910_clock}, want 1789772"
                 )
             
-            # 0x9c: K051649 clock (32 bits)
-            #  Input clock rate in Hz for the Konami SCC PSG chip. A typical value is
-            #  1789772. It should be 0 if there is no PSG chip used.
+            # 0x9c: K051649/K052539 clock (32 bits)
+            #  Input clock rate in Hz for the K051649 chip. A typical value is
+            #  1789772. It should be 0 if there is no K051649 chip used.
+            #  If bit 31 is set it is a K052539.
             k051649_clock = struct.unpack_from("<I", header, 0x9C)[0]
-            if k051649_clock != 1789772 and k051649_clock != 0:
+            if k051649_clock != 1789772 and k051649_clock != 2149273420 and k051649_clock != 0:
                 raise Exception(
-                    f"Invalid VGM clock freq; got {k051649_clock}, want 1789772 or 0"
+                    f"Invalid VGM clock freq; got {k051649_clock}, want 1789772 or 2149273420 or 0"
                 )
 
     def tick(self) -> None:
