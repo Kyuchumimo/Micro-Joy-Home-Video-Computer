@@ -18,7 +18,7 @@ class Music810:
         self._ticks_to_wait = 0
         self._end_of_song = False
 
-        self._i2c0 = I2C(1, sda=Pin(10), scl=Pin(11), freq=400_000)
+        self._i2c0 = I2C(0, sda=Pin(0), scl=Pin(1), freq=400_000)
 
         self.reset()
 
