@@ -63,6 +63,9 @@ try:
             # KEY ON/OFF
             elif data[i + 1] == 0x03:
                 new_data.extend(bytes(b"\xD2") + bytes(b"\xAF") + data[i + 3].to_bytes(1, byteorder='big'))
+            # WAVEFORM (SCC+)
+            elif data[i + 1] == 0x04:
+                new_data.extend(bytes(b"\xD2") + data[i + 2].to_bytes(1, byteorder='big') + data[i + 3].to_bytes(1, byteorder='big'))
                 
             i += 4
             if i < ((loop_offset + 0x1C) - (vmg_data_offset + 0x34)):
