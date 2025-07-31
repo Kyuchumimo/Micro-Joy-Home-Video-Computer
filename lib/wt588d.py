@@ -16,11 +16,6 @@ class WT588D:
             self.cs.init(self.rst.OUT, value=1)
 
     def send_threelines(self, addr):
-        self.rst.value(0)           # reset the IC
-        time.sleep_ms(5)            # reset signal retain low level 5ms
-        self.rst.value(1)
-        time.sleep_ms(17)           # reset signal retain high level 17 ms
-
         self.cs.value(0)
         time.sleep_ms(5)            # select-chip signal retain low level 5ms
 
@@ -38,11 +33,6 @@ class WT588D:
         self.cs.value(1)
 
     def send_oneline(self, addr):
-        self.rst.value(0)           # reset the IC
-        time.sleep_ms(5)            # reset signal retain low level 5ms
-        self.rst.value(1)
-        time.sleep_ms(17)           # reset signal retain high level 17ms
-
         self.sda.value(0)
         time.sleep_ms(5)            # put data signal to low level 5ms
 
