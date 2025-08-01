@@ -15,6 +15,11 @@ class WT588D:
         if self.cs:
             self.cs.init(self.rst.OUT, value=1)
 
+        self.rst.value(0)           # reset the IC
+        time.sleep_ms(5)            # reset signal retain low level 5ms
+        self.rst.value(1)
+        time.sleep_ms(17)           # reset signal retain high level 17ms
+
     def send_threelines(self, addr):
         self.cs.value(0)
         time.sleep_ms(5)            # select-chip signal retain low level 5ms
