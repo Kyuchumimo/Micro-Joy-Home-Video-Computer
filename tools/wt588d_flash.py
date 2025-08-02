@@ -2,26 +2,11 @@ from machine import SPI, Pin
 from flash_spi import FLASH
 import time
 
-import machine
 import sdcard
 import uos
 
-# Assign chip select (CS) pin (and start it high)
-cs = machine.Pin(1, machine.Pin.OUT)
-
-# Intialize SPI peripheral (start with 1 MHz)
-spi = machine.SPI(0,
-                  baudrate=1000000,
-                  polarity=0,
-                  phase=0,
-                  bits=8,
-                  firstbit=machine.SPI.MSB,
-                  sck=Pin(2),
-                  mosi=Pin(3),
-                  miso=Pin(4))
-
 # Initialize SD card
-sd = sdcard.SDCard(spi, cs)
+sd = sdcard.SDCard(SPI(0, baudrate=1_320_000, sck=Pin(2), mosi=Pin(3), miso=Pin(4)), Pin(1, Pin.OUT, value=1))
 
 # Mount filesystem
 vfs = uos.VfsFat(sd)
@@ -30,9 +15,9 @@ uos.mount(vfs, "/sd")
 ####################################
 
 cspins = [Pin(13, Pin.OUT, value=1)]
-flash = FLASH(SPI(1, baudrate=20_000_000, sck=Pin(14), miso=Pin(12), mosi=Pin(11)), cspins)
+flash = FLASH(SPI(1, baudrate=20_000_000, sck=Pin(14), mosi=Pin(11), miso=Pin(12)), cspins)
 
-filename = "/sd/filename.winproj.bin"
+filename = "/sd/snspell.winproj.bin"
 block_size = 4096
 
 with open(filename, "rb") as f:
