@@ -17,7 +17,7 @@ uos.mount(vfs, "/sd")
 cspins = [Pin(13, Pin.OUT, value=1)]
 flash = FLASH(SPI(1, baudrate=20_000_000, sck=Pin(14), mosi=Pin(11), miso=Pin(12)), cspins)
 
-filename = "/sd/snspell.winproj.bin"
+filename = "/sd/filename.winproj.bin"
 block_size = 4096
 
 with open(filename, "rb") as f:
@@ -56,3 +56,4 @@ Pin(11, mode=Pin.IN, pull=None)
 Pin(12, mode=Pin.IN, pull=None)
 Pin(13, mode=Pin.IN, pull=None)
 Pin(14, mode=Pin.IN, pull=None)
+
