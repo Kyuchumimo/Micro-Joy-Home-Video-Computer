@@ -13,7 +13,7 @@ class WT588D:
         if self.scl:
             self.scl.init(self.scl.OUT, value=1)
         if self.cs:
-            self.cs.init(self.rst.OUT, value=1)
+            self.cs.init(self.cs.OUT, value=1)
 
         self.rst.value(0)           # reset the IC
         time.sleep_ms(5)            # reset signal retain low level 5ms
@@ -54,3 +54,4 @@ class WT588D:
             addr>>=1
 
         self.sda.value(1)
+
