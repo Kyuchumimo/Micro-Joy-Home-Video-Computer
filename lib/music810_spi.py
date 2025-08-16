@@ -16,10 +16,10 @@ class Music810:
         self._ticks_to_wait = 0
         self._end_of_song = False
 
-        self.spi = spi
-        self.cs = cs
+        self._spi = spi
+        self._cs = cs
 
-        self.cs.high()
+        self._cs.high()
 
         self.reset()
 
@@ -177,25 +177,25 @@ class Music810:
             #  0xa0 aa dd : AY-3-8910, write value dd to register aa
             elif data[i] == 0xa0:
                 #self.activate_psg_registers()
-                self.cs.low()
-                self.spi.write(b'\xffP')
-                self.cs.high()
+                self._cs.low()
+                self._spi.write(b'\xffP')
+                self._cs.high()
                 
-                self.cs.low()
-                self.spi.write(data[i + 1].to_bytes(1, None) + data[i + 2].to_bytes(1, None))
-                self.cs.high()
+                self._cs.low()
+                self._spi.write(data[i + 1].to_bytes(1, None) + data[i + 2].to_bytes(1, None))
+                self._cs.high()
                 i += 3
             
             #  0xd2 aa dd : SCC, write value dd to register aa
             elif data[i] == 0xd2:
                 #self.activate_scc_registers()
-                self.cs.low()
-                self.spi.write(b'\xffQ')
-                self.cs.high()
+                self._cs.low()
+                self._spi.write(b'\xffQ')
+                self._cs.high()
                 
-                self.cs.low()
-                self.spi.write(data[i + 1].to_bytes(1, None) + data[i + 2].to_bytes(1, None))
-                self.cs.high()
+                self._cs.low()
+                self._spi.write(data[i + 1].to_bytes(1, None) + data[i + 2].to_bytes(1, None))
+                self._cs.high()
                 i += 3
 
             else:
@@ -229,22 +229,22 @@ class Music810:
         lsb = reg & 255
         msb = reg >> 8
 
-        self.cs.low()
-        self.spi.write(b'\xffP')
-        self.cs.high()
+        self._cs.low()
+        self._spi.write(b'\xffP')
+        self._cs.high()
 
         #mixer = int.from_bytes(self._i2c0.readfrom_mem(0x50, 7, 2), "big")
-        self.cs.low()
-        self.spi.write(bytes(b"\x07") + (0x3F & ~(1 << channel) | (1 << channel + 3)).to_bytes(1, None))
-        self.cs.high()
+        self._cs.low()
+        self._spi.write(bytes(b"\x07") + (0x3F & ~(1 << channel) | (1 << channel + 3)).to_bytes(1, None))
+        self._cs.high()
         
-        self.cs.low()
-        self.spi.write((channel*2).to_bytes(1, None) + lsb.to_bytes(1, None))
-        self.cs.high()
+        self._cs.low()
+        self._spi.write((channel*2).to_bytes(1, None) + lsb.to_bytes(1, None))
+        self._cs.high()
         
-        self.cs.low()
-        self.spi.write((channel*2+1).to_bytes(1, None) + msb.to_bytes(1, None))
-        self.cs.high()
+        self._cs.low()
+        self._spi.write((channel*2+1).to_bytes(1, None) + msb.to_bytes(1, None))
+        self._cs.high()
 
     def _play_note(self, voice: int, note: int, octave: int) -> None:
         # Initial note C0:
@@ -275,7 +275,7 @@ class Music810:
 
         :param str notes: Notes to play.
         """
-        # Inspired by C128 "play" BASIC command:
+        # In_spired by C128 "play" BASIC command:
         # https://www.commodore.ca/manuals/128_system_guide/sect-07b.htm#7.3.html
 
         # Defaults
@@ -355,34 +355,34 @@ class Music810:
         assert 0 <= channel <= 2
         assert 0 <= vol <= 15
         
-        self.cs.low()
-        self.spi.write(b'\xffP')
-        self.cs.high()
+        self._cs.low()
+        self._spi.write(b'\xffP')
+        self._cs.high()
         
-        self.cs.low()
-        self.spi.write((8+channel).to_bytes(1, None) + vol.to_bytes(1, None))
-        self.cs.high()
+        self._cs.low()
+        self._spi.write((8+channel).to_bytes(1, None) + vol.to_bytes(1, None))
+        self._cs.high()
     
     def reset(self) -> None:
         """
         Reset the LPC810 chip.
         Turn off all audio channels.
         """
-        self.cs.low()
-        self.spi.write(b'\xffP')
-        self.cs.high()
+        self._cs.low()
+        self._spi.write(b'\xffP')
+        self._cs.high()
         
-        self.cs.low()
-        self.spi.write(b'\x07?')
-        self.cs.high()
+        self._cs.low()
+        self._spi.write(b'\x07?')
+        self._cs.high()
         
-        self.cs.low()
-        self.spi.write(b'\xffQ')
-        self.cs.high()
+        self._cs.low()
+        self._spi.write(b'\xffQ')
+        self._cs.high()
         
-        self.cs.low()
-        self.spi.write(b'\xaf\x00')
-        self.cs.high()
+        self._cs.low()
+        self._spi.write(b'\xaf\x00')
+        self._cs.high()
         
         self._offset = 0
         self._data = bytearray()
