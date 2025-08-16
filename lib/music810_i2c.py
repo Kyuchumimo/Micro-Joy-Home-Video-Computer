@@ -1,15 +1,13 @@
 import struct
 import time
 
-from machine import I2C, Pin
-
 __docformat__ = "restructuredtext"
 
 class Music810:
     """
     Class to play music on an LPC810 chip
     """
-    def __init__(self):
+    def __init__(self, i2c):
         self._offset = 0
         self._data = bytearray()
         self._should_loop = False
@@ -18,7 +16,7 @@ class Music810:
         self._ticks_to_wait = 0
         self._end_of_song = False
 
-        self._i2c0 = I2C(0, sda=Pin(0), scl=Pin(1), freq=400_000)
+        self._i2c = i2c
 
         self.reset()
 
@@ -175,12 +173,12 @@ class Music810:
 
             #  0xa0 aa dd : AY-3-8910, write value dd to register aa
             elif data[i] == 0xa0:
-                self._i2c0.writeto(0x50, data[i + 1].to_bytes(1, None) + data[i + 2].to_bytes(1, None))
+                self._i2c.writeto(0x50, data[i + 1].to_bytes(1, None) + data[i + 2].to_bytes(1, None))
                 i += 3
             
             #  0xd2 aa dd : SCC, write value dd to register aa
             elif data[i] == 0xd2:
-                self._i2c0.writeto(0x51, data[i + 1].to_bytes(1, None) + data[i + 2].to_bytes(1, None))
+                self._i2c.writeto(0x51, data[i + 1].to_bytes(1, None) + data[i + 2].to_bytes(1, None))
                 i += 3
 
             else:
@@ -214,13 +212,13 @@ class Music810:
         lsb = reg & 255
         msb = reg >> 8
 
-        #mixer = int.from_bytes(self._i2c0.readfrom_mem(0x50, 7, 2), "big")
-        self._i2c0.writeto(0x50, bytes(b"\x07") + (0x3F & ~(1 << channel) | (1 << channel + 3)).to_bytes(1, None))
-        #self._i2c0.writeto(0x50, bytes(b"\x07\x38"))
+        #mixer = int.from_bytes(self._i2c.readfrom_mem(0x50, 7, 2), "big")
+        self._i2c.writeto(0x50, bytes(b"\x07") + (0x3F & ~(1 << channel) | (1 << channel + 3)).to_bytes(1, None))
+        #self._i2c.writeto(0x50, bytes(b"\x07\x38"))
         #print(f"{bytes(b'\x07') + (mixer & ~(1 << channel) | (1 << channel + 3)).to_bytes(1, None)}")
 
-        self._i2c0.writeto(0x50, (channel*2).to_bytes(1, None) + lsb.to_bytes(1, None))
-        self._i2c0.writeto(0x50, (channel*2+1).to_bytes(1, None) + msb.to_bytes(1, None))
+        self._i2c.writeto(0x50, (channel*2).to_bytes(1, None) + lsb.to_bytes(1, None))
+        self._i2c.writeto(0x50, (channel*2+1).to_bytes(1, None) + msb.to_bytes(1, None))
 
     def _play_note(self, voice: int, note: int, octave: int) -> None:
         # Initial note C0:
@@ -331,14 +329,14 @@ class Music810:
         assert 0 <= channel <= 2
         assert 0 <= vol <= 15
         
-        self._i2c0.writeto(0x50, (8+channel).to_bytes(1, None) + vol.to_bytes(1, None))
+        self._i2c.writeto(0x50, (8+channel).to_bytes(1, None) + vol.to_bytes(1, None))
     
     def reset(self) -> None:
         """
         Reset the LPC810 chip.
-        Set volume to 0 in all channels.
+        Turn off all audio channels.
         """
-        self._i2c0.writeto(0x50, b"\x07\x3F")
-        self._i2c0.writeto(0x51, b"\xAF\x00")
+        self._i2c.writeto(0x50, b"\x07\x3F")
+        self._i2c.writeto(0x51, b"\xAF\x00")
         self._offset = 0
         self._data = bytearray()
