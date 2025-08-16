@@ -1,4 +1,4 @@
-from machine import Pin
+from machine import Pin, SPI
 from rp2 import PIO, StateMachine, asm_pio
 import time
 
@@ -320,7 +320,7 @@ def vdp_init(mode, color=VDP_BLACK, big_sprites=False, magnify=False):
 
 vdp_init(VDP_MODE_TEXT, VDP_BLACK, True, False)
 
-vdp_print("""MICRO JOY HOME VIDEO COMPUTER\nVERSION 2025.03.21\nCOPYRIGHT (C) 2024-2025 KYUCHUMIMO
+vdp_print("""MJHVC\nVERSION 2025.08.16\nCOPYRIGHT (C) 2024-2025 -
 
 THIS SOFTWARE COMES WITH ABSOLUTELY NO
 WARRANTY, TO THE EXTENT PERMITTED BY
@@ -328,9 +328,15 @@ APPLICABLE LAW.
 """, 0, 0)
 
 # AUDIO
-import music810
+import music810_spi
 
-music = music810.Music810()
+sck = Pin(2, Pin.OUT)
+sck.high()
+sck.low()
+sck.high()
+time.sleep(1)
+
+music = music810_spi.Music810(SPI(0, baudrate=10_000_000, sck=Pin(2), mosi=Pin(3)), Pin(4, Pin.OUT))
 
 music.play_notes("SO4GGO5CEQG")
 
