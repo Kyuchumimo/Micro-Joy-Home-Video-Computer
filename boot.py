@@ -320,7 +320,7 @@ def vdp_init(mode, color=VDP_BLACK, big_sprites=False, magnify=False):
 
 vdp_init(VDP_MODE_TEXT, VDP_BLACK, True, False)
 
-vdp_print("""MJHVC\nVERSION 2025.08.16\nCOPYRIGHT (C) 2024-2025 -
+vdp_print("""MICRO JOY HOME VIDEO COMPUTER\nVERSION 2025.08.16\nCOPYRIGHT (C) 2024-2025 -
 
 THIS SOFTWARE COMES WITH ABSOLUTELY NO
 WARRANTY, TO THE EXTENT PERMITTED BY
@@ -447,3 +447,4 @@ def pmem(index, val32=None):
                 json.dump(data,file)
         
         return prior_val32
+
