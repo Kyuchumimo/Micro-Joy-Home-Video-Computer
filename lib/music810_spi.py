@@ -1,7 +1,7 @@
 import struct
 import time
 
-from machine import SPI, Pin
+from machine import Pin, SPI
 
 __docformat__ = "restructuredtext"
 
