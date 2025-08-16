@@ -1,8 +1,6 @@
 import struct
 import time
 
-from machine import Pin, SPI
-
 __docformat__ = "restructuredtext"
 
 class Music810:
@@ -388,4 +386,3 @@ class Music810:
         
         self._offset = 0
         self._data = bytearray()
-
