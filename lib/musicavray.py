@@ -1,15 +1,13 @@
 import struct
 import time
 
-from machine import UART, Pin
-
 __docformat__ = "restructuredtext"
 
 class Musicavray:
     """
     Class to play music on an ATmega8/48/88/168/328 chip
     """
-    def __init__(self):
+    def __init__(self, uart):
         self._offset = 0
         self._data = bytearray()
         self._should_loop = False
@@ -18,7 +16,7 @@ class Musicavray:
         self._ticks_to_wait = 0
         self._end_of_song = False
 
-        self._uart0 = UART(0, baudrate=57600, tx=Pin(0), rx=Pin(1), bits=8, parity=None, stop=1)
+        self._uart = uart
 
         self.reset()
 
@@ -164,7 +162,7 @@ class Musicavray:
 
             #  0xa0 aa dd : AY-3-8910, write value dd to register aa
             elif data[i] == 0xa0:
-                self._uart0.write(bytes(b"\xff") + data[i + 1].to_bytes(1, None) + data[i + 2].to_bytes(1, None))
+                self._uart.write(bytes(b"\xff") + data[i + 1].to_bytes(1, None) + data[i + 2].to_bytes(1, None))
                 i += 3
 
             else:
@@ -188,6 +186,7 @@ class Musicavray:
         address = [0x8, 0x9, 0xA, 0xB]
         
         for i in range(4):
-            self._uart0.write(bytes(b"\xff") + address[i].to_bytes(1, None) + bytes(b"\x00"))
+            self._uart.write(bytes(b"\xff") + address[i].to_bytes(1, None) + bytes(b"\x00"))
         self._offset = 0
         self._data = bytearray()
+
