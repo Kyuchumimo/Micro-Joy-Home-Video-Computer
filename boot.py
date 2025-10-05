@@ -198,7 +198,7 @@ def vdp_pix(x, y, color):
 
 ASSET_PATH = ""
 
-def vdp_sync(mask=0, asset=0):    
+def vdp_sync(mask=0, asset=0):
     if vdp_mode == VDP_MODE_G1:
         with open(f'{ASSET_PATH}/graphics/{asset}.mgb', 'rb') as file:
             # FILE HEADER
@@ -207,13 +207,13 @@ def vdp_sync(mask=0, asset=0):
                 raise Exception("Invalid header")
             
             version = file.read(2)
-            if version != b'02':
+            if version != b'03':
                 raise Exception("Invalid version")
             
             chunkFlag = file.read(1)
-            if chunkFlag != b'\x0e':
+            if chunkFlag != b'\x0f':
                 raise Exception(
-                    f"Invalid chunkFlag; got {chunkFlag}, want 0x0e"
+                    f"Invalid chunkFlag; got {chunkFlag}, want 0x0f"
                 )
             
             if mask == 0: mask = 0b1111
@@ -245,7 +245,6 @@ def vdp_sync(mask=0, asset=0):
                 set_write_address(NAME_TABLE)
                 for byte in bytearray(file.read(0x300)):
                     write_byte_to_VRAM(byte)
-                
 
 def vdp_init(mode, color=VDP_BLACK, big_sprites=False, magnify=False):
     global SPRITE_ATTRIBUTES
@@ -447,6 +446,7 @@ def pmem(index, val32=None):
                 json.dump(data,file)
         
         return prior_val32
+
 
 
 
