@@ -1,6 +1,5 @@
 from machine import SPI, Pin
-from flash_spi import FLASH
-import time
+from spiram import SPIRAM
 
 import sdcard
 import uos
@@ -14,10 +13,13 @@ uos.mount(vfs, "/sd")
 
 ####################################
 
-cspins = [Pin(13, Pin.OUT, value=1)]
-flash = FLASH(SPI(1, baudrate=20_000_000, sck=Pin(14), mosi=Pin(11), miso=Pin(12)), cspins)
+rst = Pin(0, Pin.OUT, value=0)           # reset the IC
 
-filename = "/sd/filename.winproj.bin"
+cspins = [Pin(17, Pin.OUT, value=1)]
+#flash = FLASH(SPI(1, baudrate=20_000_000, sck=Pin(14), mosi=Pin(11), miso=Pin(12)), cspins)
+ram = SPIRAM(SPI(0, baudrate=20_000_000, sck=Pin(18), mosi=Pin(19), miso=Pin(16)), cspins)
+
+filename = "snspell.winproj.bin"
 block_size = 4096
 
 with open(filename, "rb") as f:
@@ -37,10 +39,10 @@ with open(filename, "rb") as f:
         end = start + len(data)
 
         # Ensures that flash has the necessary size to write the block
-        flash[start:end] = data
+        ram[start:end] = data
         
         
-        if flash[start:end] == data:
+        if ram[start:end] == data:
             print(f"flash[{start}:{end}]: OK")
         else:
             print(f"flash[{start}:{end}]: ERR")
@@ -51,9 +53,8 @@ with open(filename, "rb") as f:
         # Updates the starting position for the next block
         start = end
 
-
-Pin(11, mode=Pin.IN, pull=None)
-Pin(12, mode=Pin.IN, pull=None)
-Pin(13, mode=Pin.IN, pull=None)
-Pin(14, mode=Pin.IN, pull=None)
-
+Pin(0, mode=Pin.IN, pull=None)
+Pin(16, mode=Pin.IN, pull=None)
+Pin(17, mode=Pin.IN, pull=None)
+Pin(18, mode=Pin.IN, pull=None)
+Pin(19, mode=Pin.IN, pull=None)
