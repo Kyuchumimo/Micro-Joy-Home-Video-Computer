@@ -3,9 +3,8 @@ from rp2 import PIO, StateMachine, asm_pio
 import time
 
 # VIDEO
-CSW = Pin(13, Pin.OUT)
-CSR = Pin(14, Pin.OUT)
-MODE = Pin(15, Pin.OUT)
+MODE = Pin(6, Pin.OUT)
+CSW = Pin(7, Pin.OUT)
 
 @asm_pio(sideset_init=PIO.OUT_HIGH, out_init=(rp2.PIO.OUT_LOW,) * 8, out_shiftdir=PIO.SHIFT_RIGHT,
  autopull=True, pull_thresh=16)
@@ -14,18 +13,8 @@ def paral_write():
     out(pins, 8)  .side(0)
     nop()         .side(1)
 
-@asm_pio(sideset_init=PIO.OUT_HIGH, in_shiftdir=rp2.PIO.SHIFT_LEFT,
- autopush=False, push_thresh=16)
-def paral_read():
-    nop()         .side(0)
-    in_(pins, 8)
-    push()        .side(1)
-
-write_sm = StateMachine(0, paral_write, freq=1000000, sideset_base=CSW, out_base=Pin(5))
+write_sm = StateMachine(0, paral_write, freq=1000000, sideset_base=CSW, out_base=Pin(8))
 write_sm.active(1)
-
-read_sm = StateMachine(1, paral_read, freq=1000000, sideset_base=CSR, in_base=Pin(5))
-read_sm.active(1)
 
 VDP_TRANSPARENT = 0
 VDP_BLACK = 1
@@ -110,10 +99,10 @@ def vdp_sprite_set_position(number, x, y):
     write_byte_to_VRAM(x+32)
 
 def vdp_sprite_init(name, priority, color):
-    addr = SPRITE_ATTRIBUTES + 4*priority
+    addr = SPRITE_ATTRIBUTES + 4*priority + 2
     set_write_address(addr)
-    write_byte_to_VRAM(0)
-    write_byte_to_VRAM(0)
+    #write_byte_to_VRAM(0)
+    #write_byte_to_VRAM(0)
     if sprite_size_sel:
         write_byte_to_VRAM(4*name)
     else:
@@ -319,7 +308,7 @@ def vdp_init(mode, color=VDP_BLACK, big_sprites=False, magnify=False):
 
 vdp_init(VDP_MODE_TEXT, VDP_BLACK, True, False)
 
-vdp_print("""MICRO JOY HOME VIDEO COMPUTER\nVERSION 2025.08.16\nCOPYRIGHT (C) 2024-2025 KYUCHUMIMO
+vdp_print("""MICRO JOY HOME VIDEO COMPUTER\nVERSION 2026.01.24\nCOPYRIGHT (C) 2026 KYUCHUMIMO
 
 THIS SOFTWARE COMES WITH ABSOLUTELY NO
 WARRANTY, TO THE EXTENT PERMITTED BY
@@ -337,7 +326,7 @@ time.sleep(1)
 
 music = music810_spi.Music810(SPI(0, baudrate=10_000_000, sck=Pin(2), mosi=Pin(3)), Pin(4, Pin.OUT))
 
-music.play_notes("SO4GGO5CEQG")
+music.play_notes("SO6F")
 
 # INPUT
 dataPin0 = Pin(22, Pin.IN, Pin.PULL_UP)
