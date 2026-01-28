@@ -87,7 +87,7 @@ try:
                         offset = 0
                     
                     _DRAW_DIR()
-                    _DRAW_FS()
+                    _DRAW_FS()        
                 except BaseException as err:
                     from sys import print_exception
                     print_exception(err)
@@ -109,7 +109,10 @@ try:
                     _DRAW_DIR()
                     _DRAW_FS()
             elif btnp0 == 1: # 0
-                os.chdir('..')
+                try:
+                    os.chdir('..')
+                except (OSError):
+                    continue
                 listdir = [i for i in os.ilistdir(os.getcwd())]
                 
                 opt = 0
