@@ -87,7 +87,7 @@ try:
                         offset = 0
                     
                     _DRAW_DIR()
-                    _DRAW_FS()        
+                    _DRAW_FS()
                 except BaseException as err:
                     from sys import print_exception
                     print_exception(err)
@@ -136,3 +136,4 @@ except BaseException as err:
     vdp_init(VDP_MODE_TEXT, VDP_BLACK, True, False)
     
     vdp_text_wrap(f"{err.__class__.__name__}: {err}", 0, 0, VDP_WHITE, 40, 24, VDP_DARK_RED)
+
