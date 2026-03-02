@@ -167,10 +167,6 @@ class Music810:
                     self._end_of_song = True
                     break
 
-            #  0x94 ss    : DAC Stream Control Write: Stop Stream
-            elif data[i] == 0x94:
-                i = i + 2
-
             #  0xa0 aa dd : AY-3-8910, write value dd to register aa
             elif data[i] == 0xa0:
                 self._i2c.writeto(0x50, data[i + 1].to_bytes(1, None) + data[i + 2].to_bytes(1, None))
@@ -340,3 +336,4 @@ class Music810:
         self._i2c.writeto(0x51, b"\xAF\x00")
         self._offset = 0
         self._data = bytearray()
+
