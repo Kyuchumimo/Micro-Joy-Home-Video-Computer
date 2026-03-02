@@ -156,10 +156,6 @@ class Musicavray:
                     self._end_of_song = True
                     break
 
-            #  0x94 ss    : DAC Stream Control Write: Stop Stream
-            elif data[i] == 0x94:
-                i = i + 2
-
             #  0xa0 aa dd : AY-3-8910, write value dd to register aa
             elif data[i] == 0xa0:
                 self._uart.write(bytes(b"\xff") + data[i + 1].to_bytes(1, None) + data[i + 2].to_bytes(1, None))
@@ -189,4 +185,5 @@ class Musicavray:
             self._uart.write(bytes(b"\xff") + address[i].to_bytes(1, None) + bytes(b"\x00"))
         self._offset = 0
         self._data = bytearray()
+
 
