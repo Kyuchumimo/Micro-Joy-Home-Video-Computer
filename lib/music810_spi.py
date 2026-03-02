@@ -170,10 +170,6 @@ class Music810:
                     self._end_of_song = True
                     break
 
-            #  0x94 ss    : DAC Stream Control Write: Stop Stream
-            elif data[i] == 0x94:
-                i = i + 2
-
             #  0xa0 aa dd : AY-3-8910, write value dd to register aa
             elif data[i] == 0xa0:
                 #self.activate_psg_registers()
