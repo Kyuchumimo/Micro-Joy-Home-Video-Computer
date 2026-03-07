@@ -1,4 +1,4 @@
-from machine import Pin, SPI
+from machine import Pin, I2C
 from rp2 import PIO, StateMachine, asm_pio
 import time
 
@@ -316,15 +316,9 @@ APPLICABLE LAW.
 """, 0, 0)
 
 # AUDIO
-import music810_spi
+import music810_i2c
 
-sck = Pin(2, Pin.OUT)
-sck.high()
-sck.low()
-sck.high()
-time.sleep(1)
-
-music = music810_spi.Music810(SPI(0, baudrate=10_000_000, sck=Pin(2), mosi=Pin(3)), Pin(4, Pin.OUT))
+music = music810_i2c.Music810(I2C(0, sda=Pin(4), scl=Pin(5), freq=400_000))
 
 music.play_notes("SO6F")
 
@@ -435,3 +429,4 @@ def pmem(index, val32=None):
                 json.dump(data,file)
         
         return prior_val32
+
