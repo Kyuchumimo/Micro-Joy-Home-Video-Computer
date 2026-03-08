@@ -84,7 +84,7 @@ sdaPin = Pin(1)
 voice = wt588d.WT588D(rstPin, sdaPin)
 
 # Pinout setup
-BUSY_PIN = 5
+BUSY_PIN = 2
 LED_PIN = 'LED'
 
 led = Pin(LED_PIN, Pin.OUT, value=0)
@@ -945,3 +945,4 @@ while True:
                                 pass
     except KeyError:
         print(f"Unknown scancode: {kbdat:02X}")
+
