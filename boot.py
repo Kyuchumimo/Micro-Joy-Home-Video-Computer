@@ -13,7 +13,7 @@ def paral_write():
     out(pins, 8)  .side(0)
     nop()         .side(1)
 
-write_sm = StateMachine(0, paral_write, freq=1000000, sideset_base=CSW, out_base=Pin(8))
+write_sm = StateMachine(0, paral_write, freq=3_580_000, sideset_base=CSW, out_base=Pin(8))
 write_sm.active(1)
 
 VDP_TRANSPARENT = 0
@@ -118,24 +118,22 @@ def vdp_set_pattern_color(index, fg, bg):
 
 def vdp_print(text, x, y):
     text = str(text).upper()
-    
-    if vdp_mode == VDP_MODE_G1:
-        set_write_address(NAME_TABLE + (x + (y * 32)))
-        
-        for i in range(len(str(text).splitlines())):
-            if i>0:
-                set_write_address(NAME_TABLE + (x + ((y + i) * 32)))
-            for character in range(len(str(text).splitlines()[i]) - max(0, -32 + x + len(str(text).splitlines()[i]))):
-                write_byte_to_VRAM(ord(str(text).splitlines()[i][character]))
-    
-    elif vdp_mode == VDP_MODE_TEXT:
-        set_write_address(NAME_TABLE + (x + (y * 40)))
-        
-        for i in range(len(str(text).splitlines())):
-            if i>0:
-                set_write_address(NAME_TABLE + (x + ((y + i) * 40)))
-            for character in range(len(str(text).splitlines()[i]) - max(0, -40 + x + len(str(text).splitlines()[i]))):
-                write_byte_to_VRAM(ord(str(text).splitlines()[i][character]))
+    lines = text.splitlines()
+
+    width = 32 if vdp_mode == VDP_MODE_G1 else 40
+
+    write = write_byte_to_VRAM
+    set_addr = set_write_address
+
+    for i, line in enumerate(lines):
+        line_len = len(line)
+
+        set_addr(NAME_TABLE + x + ((y + i) * width))
+
+        limit = line_len - max(0, -width + x + line_len)
+
+        for ch in line[:limit]:
+            write(ord(ch))
 
 def vdp_text_wrap(text,x,y,color,w,h,border=None):
     # optional box border
@@ -429,4 +427,5 @@ def pmem(index, val32=None):
                 json.dump(data,file)
         
         return prior_val32
+
 
