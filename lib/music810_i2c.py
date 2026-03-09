@@ -208,10 +208,8 @@ class Music810:
         lsb = reg & 255
         msb = reg >> 8
 
-        #mixer = int.from_bytes(self._i2c.readfrom_mem(0x50, 7, 2), "big")
-        self._i2c.writeto(0x50, bytes(b"\x07") + (0x3F & ~(1 << channel) | (1 << channel + 3)).to_bytes(1, None))
-        #self._i2c.writeto(0x50, bytes(b"\x07\x38"))
-        #print(f"{bytes(b'\x07') + (mixer & ~(1 << channel) | (1 << channel + 3)).to_bytes(1, None)}")
+        mixer = int.from_bytes(self._i2c.readfrom_mem(0x50, 0x07, 1))
+        self._i2c.writeto(0x50, bytes(b'\x07') + (mixer & ~(1 << channel) | (1 << (channel + 3))).to_bytes(1, None))
 
         self._i2c.writeto(0x50, (channel*2).to_bytes(1, None) + lsb.to_bytes(1, None))
         self._i2c.writeto(0x50, (channel*2+1).to_bytes(1, None) + msb.to_bytes(1, None))
@@ -315,6 +313,21 @@ class Music810:
                 i += 1
         self.set_vol(0, 0)
     
+    def play_noise(self, channel: int, freq: int) -> None:
+        """
+        Play noise.
+
+        :param int channel: One of the 3 available channels:0, 1 or 2.
+        :param float freq: Frequency to play. Valid range: 0 - 28
+        """
+        assert 0 <= channel <= 2
+        assert 0 <= freq <= 28
+
+        mixer = int.from_bytes(self._i2c.readfrom_mem(0x50, 0x07, 1))
+        self._i2c.writeto(0x50, bytes(b'\x07') + (mixer & ~(1 << (channel + 3)) | (1 << channel)).to_bytes(1, None))
+
+        self._i2c.writeto(0x50, bytes(b'\x06') + freq.to_bytes(1, None))
+    
     def set_vol(self, channel: int, vol: int) -> None:
         """
         Set the volume for the given channel.
@@ -330,10 +343,20 @@ class Music810:
     def reset(self) -> None:
         """
         Reset the LPC810 chip.
-        Turn off all audio channels.
+        
+        Set volume to 0 in all channels.
         """
         self._i2c.writeto(0x50, b"\x07\x3F")
+        self._i2c.writeto(0x50, b"\x08\x00")
+        self._i2c.writeto(0x50, b"\x09\x00")
+        self._i2c.writeto(0x50, b"\x0A\x00")
+        
+        self._i2c.writeto(0x51, b"\xAA\x0F")
+        self._i2c.writeto(0x51, b"\xAB\x0F")
+        self._i2c.writeto(0x51, b"\xAC\x0F")
+        self._i2c.writeto(0x51, b"\xAD\x0F")
+        self._i2c.writeto(0x51, b"\xAE\x0F")
         self._i2c.writeto(0x51, b"\xAF\x00")
+        
         self._offset = 0
         self._data = bytearray()
-
