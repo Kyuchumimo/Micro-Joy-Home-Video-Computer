@@ -29,6 +29,7 @@ class Musicavray:
 
         :param str filename: The VGM song to load.
         """
+        self.reset()
         with open(filename, "rb") as file:
             # Assuming VGM from Furnace (256 bytes of header)
             header = bytearray(file.read(0x100))
@@ -179,11 +180,13 @@ class Musicavray:
         Reset the YMZ284 chip.
         Set volume to 0 in all channels.
         """
-        address = [0x8, 0x9, 0xA, 0xB]
+        self._uart.write(b"\xFF\x07\x3F")
+        self._uart.write(b"\xFF\x08\x00")
+        self._uart.write(b"\xFF\x09\x00")
+        self._uart.write(b"\xFF\x0A\x00")
         
-        for i in range(4):
-            self._uart.write(bytes(b"\xff") + address[i].to_bytes(1, None) + bytes(b"\x00"))
         self._offset = 0
         self._data = bytearray()
+
 
 
