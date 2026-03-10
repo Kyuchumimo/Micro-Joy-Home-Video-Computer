@@ -105,9 +105,9 @@ class Music76489:
             #  This is used for backwards compatibility in players, and defines which
             #  header values are valid.
             vgm_version = struct.unpack_from("<I", header, 8)[0]
-            if vgm_version <= 0x161:
+            if vgm_version != 0x171:
                 raise Exception(
-                    f"Invalid VGM version format; got {vgm_version:x}, want <= 0x161"
+                    f"Invalid VGM version format; got {vgm_version:x}, want 0x171"
                 )
 
             # 0x0c: SN76489 clock (32 bits)
@@ -441,4 +441,5 @@ class Music76489:
         for b in reset_seq:
             self._write_port_data(b)
         self._offset = 0
+
         self._data = bytearray()
