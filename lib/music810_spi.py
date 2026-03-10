@@ -32,6 +32,7 @@ class Music810:
 
         :param str filename: The VGM song to load.
         """
+        self.reset()
         with open(filename, "rb") as file:
             # Assuming VGM from Furnace (256 bytes of header)
             header = bytearray(file.read(0x100))
@@ -365,20 +366,54 @@ class Music810:
         Turn off all audio channels.
         """
         self._cs.low()
-        self._spi.write(b'\xffP')
+        self._spi.write(b"\xFF\x50")
         self._cs.high()
         
         self._cs.low()
-        self._spi.write(b'\x07?')
+        self._spi.write(b"\x07\x3F")
         self._cs.high()
         
         self._cs.low()
-        self._spi.write(b'\xffQ')
+        self._spi.write(b"\x08\x00")
         self._cs.high()
         
         self._cs.low()
-        self._spi.write(b'\xaf\x00')
+        self._spi.write(b"\x09\x00")
         self._cs.high()
+
+        self._cs.low()
+        self._spi.write(b"\x0A\x00")
+        self._cs.high()
+
+        
+        self._cs.low()
+        self._spi.write(b"\xFF\x51")
+        self._cs.high()
+        
+        self._cs.low()
+        self._spi.write(b"\xAA\x0F")
+        self._cs.high()
+
+        self._cs.low()
+        self._spi.write(b"\xAB\x0F")
+        self._cs.high()
+
+        self._cs.low()
+        self._spi.write(b"\xAC\x0F")
+        self._cs.high()
+
+        self._cs.low()
+        self._spi.write(b"\xAD\x0F")
+        self._cs.high()
+
+        self._cs.low()
+        self._spi.write(b"\xAE\x0F")
+        self._cs.high()
+
+        self._cs.low()
+        self._spi.write(b"\xAF\x00")
+        self._cs.high()
+
         
         self._offset = 0
         self._data = bytearray()
