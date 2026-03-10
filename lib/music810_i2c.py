@@ -29,6 +29,7 @@ class Music810:
 
         :param str filename: The VGM song to load.
         """
+        self.reset()
         with open(filename, "rb") as file:
             # Assuming VGM from Furnace (256 bytes of header)
             header = bytearray(file.read(0x100))
@@ -360,3 +361,4 @@ class Music810:
         
         self._offset = 0
         self._data = bytearray()
+
