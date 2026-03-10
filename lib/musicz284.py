@@ -40,6 +40,7 @@ class Musicz284:
 
         :param str filename: The VGM song to load.
         """
+        self.reset()
         with open(filename, "rb") as file:
             # Assuming VGM from Furnace (256 bytes of header)
             header = bytearray(file.read(0x100))
@@ -202,11 +203,25 @@ class Musicz284:
         Reset the YMZ284 chip.
         Set volume to 0 in all channels.
         """
-        for i in range(0x8, 0xB):
-            self._ymz284_a0.value(False)
-            self._write_port_data(i)
-            self._ymz284_a0.value(True)
-            self._write_port_data(0)
+        self._ymz284_a0.value(False)
+        self._write_port_data(0x07)
+        self._ymz284_a0.value(True)
+        self._write_port_data(0x3F)
+        
+        self._ymz284_a0.value(False)
+        self._write_port_data(0x08)
+        self._ymz284_a0.value(True)
+        self._write_port_data(0x00)
+
+        self._ymz284_a0.value(False)
+        self._write_port_data(0x09)
+        self._ymz284_a0.value(True)
+        self._write_port_data(0x00)
+
+        self._ymz284_a0.value(False)
+        self._write_port_data(0x0A)
+        self._ymz284_a0.value(True)
+        self._write_port_data(0x00)
+        
         self._offset = 0
         self._data = bytearray()
-
