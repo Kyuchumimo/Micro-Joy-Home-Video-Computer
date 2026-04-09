@@ -12,17 +12,15 @@ This repository is under constant construction. Once finished building the libra
 |  | Specifications |
 | ------------- | ------------- |
 | MCU  | Raspberry Pi RP2040. Dual-core Arm Cortex M0+ processor @ 125MHz, 2/4/8/16MB QSPI Flash + 264kB SRAM  |
-| Video  | Texas Instruments TMS9918 compatible Video Display Processor (VDP) |
-| Audio  | AY-3-8910 compatible Programmable Sound Generator (PSG) |
+| Video  | Texas Instruments TMS9918 compatible Video Display Processor |
+| Audio  | AY-3-8910 compatible Programmable Sound Generator |
 | Input  | x2 gamepads or PS/2 keyboard |
 | Programming language  | MicroPython v1.17 or higher |
 | Software media  | 25xx02/04/08/16/32 Mbit external SPI Flash or Internal Flash  |
 
 ## To do list
 * Schematics
-* VGM file optimizer
 * PIO 8-bit parallel read
-* How to load WT588D binary (wiki)
 * Constants (wiki)
 
 ## Special thanks to
