@@ -76,6 +76,7 @@ try:
                     if listdir[opt+offset][1] == 0x8000:
                         # Execute the python file (.py)
                         with open(f"{os.getcwd()}/{listdir[opt+offset][0]}", "r") as f:
+                            os.chdir('/')
                             exec(f.read())
                         
                         machine.reset()
