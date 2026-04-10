@@ -4,7 +4,7 @@ offset = 0
 
 # file manager
 import os
-listdir = [i for i in os.ilistdir()]
+listdir = sorted(os.ilistdir(), key=lambda x: (x[1] != 0x4000, x[0]))
 
 vdp_init(VDP_MODE_TEXT, VDP_BLACK, True, False)
 
@@ -81,7 +81,8 @@ try:
                         machine.reset()
                     elif listdir[opt+offset][1] == 0x4000:
                         os.chdir(listdir[opt+offset][0])
-                        listdir = [i for i in os.ilistdir(os.getcwd())]
+                        listdir = sorted(os.ilistdir(os.getcwd()), key=lambda x: (x[1] != 0x4000, x[0]))
+
                         
                         opt = 0
                         offset = 0
@@ -113,7 +114,7 @@ try:
                     os.chdir('..')
                 except (OSError):
                     continue
-                listdir = [i for i in os.ilistdir(os.getcwd())]
+                listdir = sorted(os.ilistdir(os.getcwd()), key=lambda x: (x[1] != 0x4000, x[0]))
                 
                 opt = 0
                 offset = 0
@@ -136,4 +137,3 @@ except BaseException as err:
     vdp_init(VDP_MODE_TEXT, VDP_BLACK, True, False)
     
     vdp_text_wrap(f"{err.__class__.__name__}: {err}", 0, 0, VDP_WHITE, 40, 24, VDP_DARK_RED)
-
