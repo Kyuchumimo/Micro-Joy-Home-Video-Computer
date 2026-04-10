@@ -1,6 +1,6 @@
 vdp_init(VDP_MODE_G1, VDP_BLACK, False, False)
 
-ASSET_PATH = '/galaxy_beam/assets'
+ASSET_PATH = '/gbeam/assets'
 SAVEID = 'galaxy_beam'
 
 vdp_sync()
